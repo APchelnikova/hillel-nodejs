@@ -17,9 +17,11 @@ const server = http.createServer((req, res) => {
     } else if (req.url === '/error') {
         res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
         res.end('Помилка сервера. Код 500.');
+
     } else if (req.url === '/time') {
         res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
         res.end('Поточний час: ' + new Date().toLocaleString('uk-UA'));
+
     } else {
         res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
         res.end('Сторінку не знайдено. Код 404.');
