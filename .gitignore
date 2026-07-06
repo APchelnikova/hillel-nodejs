@@ -1,2 +1,8 @@
-/.idea/
+# IDE
+.idea/
+
+# macOS
 .DS_Store
+
+# SSL certificates
+*.pem
