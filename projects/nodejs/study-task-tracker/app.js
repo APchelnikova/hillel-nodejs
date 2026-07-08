@@ -1,17 +1,11 @@
-const {
-    addTask,
-    completeTask,
-    getTasks,
-    deleteTask
-} = require('./modules/taskService.js');
+const { addTask } = require('./modules/taskService.js');
 
-const newTasks = ['Learn Node.js modules ', 'Practice fs module', 'Practice functions'];
+const { initStorage, saveTasks, readTasks } = require('./modules/fileStorage.js');
 
-const randomIndex = Math.floor(Math.random() * newTasks?.length);
+const tasks = ['Learn Node.js modules ', 'Practice fs module', 'Practice functions'];
 
-newTasks.forEach(addTask);
-getTasks();
-completeTask(randomIndex);
-deleteTask(randomIndex);
-getTasks();
+const newTasks = tasks.map(addTask);
 
+initStorage();
+saveTasks(newTasks);
+readTasks();
