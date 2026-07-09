@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const formatTask = (task) => {
     if (!task) {
         return;
@@ -9,4 +11,15 @@ const formatTask = (task) => {
     return `[${id}] ${title} — ${status}`;
 }
 
-module.exports = { formatTask };
+const formatLog = (event, message) => {
+    return `${new Date().toISOString()} | ${event} | ${message}\n`;
+};
+
+const createHash = (id, title, createdAt) => {
+   return crypto
+        .createHash('sha256')
+        .update(`${id}-${title}-${createdAt}`)
+        .digest('hex')
+}
+
+module.exports = { formatTask, createHash, formatLog };

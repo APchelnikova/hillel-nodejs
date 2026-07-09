@@ -1,20 +1,30 @@
-const { formatTask } = require("./taskFormatter");
+const { formatTask, createHash } = require('./taskFormatter');
+const { saveTasks} = require('./fileStorage');
+const eventLogger = require('./eventLogger');
+
 const taskList = [];
 
-const addTask = (title) => {
-    const newTask = {
-        id: taskList?.length + 1,
-        title,
-        completed: false,
-        createdAt: new Date(),
-    };
+const addTask = (list) => {
+    list.forEach((title) => {
+        const id = taskList.length + 1;
+        const createdAt = new Date().toISOString();
 
-    taskList.push(newTask);
+        const newTask = {
+            id: taskList.length + 1,
+            title,
+            completed: false,
+            createdAt,
+            hash: createHash(id, title, createdAt),
+        };
 
-    console.log(formatTask(newTask));
+        taskList.push(newTask);
 
-    return newTask;
-}
+        eventLogger.emit('taskCreated', title);
+        console.log(formatTask(newTask));
+    });
+
+    saveTasks(taskList);
+};
 
 const getTasks = () => {
     taskList.map(task => {
@@ -25,13 +35,18 @@ const getTasks = () => {
 }
 
 const completeTask = (id) => {
-    const task = taskList.find(task => task.id === id);
+    const task = taskList.find((task) => task.id === id);
 
-    if (task) {
-        task.completed = true;
+    if (!task) {
+        console.log(`Task with id ${id} not found.`);
+        return null;
     }
 
-    console.log(formatTask(task));
+    task.completed = true;
+
+    eventLogger.emit('taskCompleted', task.title);
+    console.log(formatTask(task), 'завершено');
+    saveTasks(taskList);
 
     return task;
 }
@@ -40,12 +55,15 @@ const deleteTask = (id) => {
     const index = taskList.findIndex(task => task.id === id);
 
     if (index === -1) {
+        console.log(`Task with id ${id} not found.`);
         return null;
     }
 
     const deletedTask = taskList.splice(index, 1)[0];
 
-    console.log(formatTask(deletedTask));
+    eventLogger.emit('taskDeleted', deletedTask.title);
+    console.log(formatTask(deletedTask), 'видалено');
+    saveTasks(taskList);
 
     return deletedTask;
 }

@@ -1,11 +1,26 @@
-const { addTask } = require('./modules/taskService.js');
+const {
+    addTask,
+    getTasks,
+    deleteTask,
+    completeTask,
+} = require('./modules/taskService.js');
+const {
+    initStorage,
+    saveTasks,
+    readTasks,
+} = require('./modules/fileStorage.js');
+const eventLogger = require('./modules/eventLogger');
+const { systemInfo } = require('./modules/systemInfo');
 
-const { initStorage, saveTasks, readTasks } = require('./modules/fileStorage.js');
+eventLogger.emit('appStarted');
+
+systemInfo();
+initStorage();
 
 const tasks = ['Learn Node.js modules ', 'Practice fs module', 'Practice functions'];
+const randomIndex = Math.floor(Math.random() * tasks?.length + 1);
 
-const newTasks = tasks.map(addTask);
-
-initStorage();
-saveTasks(newTasks);
+addTask(tasks);
+completeTask(randomIndex);
+deleteTask(randomIndex);
 readTasks();

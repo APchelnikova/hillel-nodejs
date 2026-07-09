@@ -1,8 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const { formatLog } = require('./taskFormatter');
 
 const dataDir = path.join(__dirname, '..', 'data');
 const filePath = path.join(dataDir, 'tasks.json');
+const logFile = path.join(dataDir, 'events.log');
+
+const writableStream = fs.createWriteStream(logFile, { flags: 'a' });
 
 const saveTasks = (tasks) => {
     try {
@@ -38,8 +42,13 @@ const initStorage = () => {
     }
 }
 
+const writeLog = (event, message) => {
+    writableStream.write(formatLog(event, message));
+};
+
 module.exports = {
     initStorage,
     saveTasks,
-    readTasks
+    readTasks,
+    writeLog
 }
