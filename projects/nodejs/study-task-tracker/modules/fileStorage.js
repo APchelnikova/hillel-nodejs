@@ -21,6 +21,8 @@ const readTasks = () => {
     try {
         const data = fs.readFileSync(filePath, 'utf8');
         console.log('Вміст файлу:', data);
+
+        return JSON.parse(data);
     } catch (err) {
         console.error('Помилка читання файлу:', err);
     }

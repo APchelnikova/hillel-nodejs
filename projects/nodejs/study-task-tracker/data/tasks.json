@@ -1,16 +1,23 @@
 [
   {
     "id": 1,
-    "title": "Learn Node.js modules ",
+    "title": "Learn Node.js modules",
+    "createdAt": "2026-07-09T23:47:50.466Z",
     "completed": false,
-    "createdAt": "2026-07-09T02:40:49.709Z",
-    "hash": "2cfb161b4982334aefa28d2d2907edaa6b9ee33917cb52a381d9207cd3182436"
+    "hash": "09db62879103fd213a125750dd71df079895b70f2d305417ec16627e6a5ce05b"
   },
   {
     "id": 2,
     "title": "Practice fs module",
+    "createdAt": "2026-07-09T23:48:09.353Z",
     "completed": false,
-    "createdAt": "2026-07-09T02:40:49.709Z",
-    "hash": "72671813ed667896ced3095571f228325524b1715d9296a4eecd925eedaa7130"
+    "hash": "0100e6a486d93f8fd42d1736e06e4d7fefc00e51c6963c23a3ef045a4532a365"
+  },
+  {
+    "id": 3,
+    "title": "Practice HTTP module",
+    "createdAt": "2026-07-09T23:48:24.533Z",
+    "completed": false,
+    "hash": "d4e2db09ed27ca89c7f2dcf77f18481b2b5f682093d58c4c8d67283f64c6084e"
   }
 ]
