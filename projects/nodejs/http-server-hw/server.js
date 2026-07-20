@@ -1,33 +1,46 @@
 const http = require('http');
 
-const server = http.createServer((req, res) => {
-    // req — вхідний запит (метод, URL, заголовки)
-    // res — відповідь, яку ми формуємо
+const express = require("express");
+const app = express();
 
-    console.log(`Отримано запит: ${req.method} ${req.url}`);
 
-    if (req.url === '/') {
-        res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
-        res.end('Головна сторінка. Код 200 — успіх.');
+app.get("/", function(request, response){
+    response.send('Головна сторінка. Код 200 — успіх.');
+});
 
-    } else if (req.url === '/about') {
-        res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
-        res.end('Сторінка "Про нас".');
+app.get("/about", function(request, response){
+    response.send('Сторінка "Про нас".');
+});
 
-    } else if (req.url === '/error') {
-        res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
-        res.end('Помилка сервера. Код 500.');
+app.get("/time", function(request, response){
+    response.send('Поточний час: ' + new Date().toLocaleString('uk-UA'));
+});
 
-    } else if (req.url === '/time') {
-        res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
-        res.end('Поточний час: ' + new Date().toLocaleString('uk-UA'));
+app.get("/error", function(request, response){
+    response.send('Помилка сервера. Код 500.');
+});
 
-    } else {
-        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-        res.end('Сторінку не знайдено. Код 404.');
+app.get("/user/:id", function (request, response) {
+    response.send("user " + request.params.id);
+});
+
+app.get("/search", (request, response) => {
+    if (!request.query.q) {
+        return response.status(400).send("Не вказано пошуковий запит");
     }
+
+    response.send('Ви шукали:' + request.query.q);
 });
 
-server.listen(3000, () => {
-    console.log('Сервер запущено: http://localhost:3000');
+app.get("/user/:id/orders", (request, response) => {
+    const { id } = request.params;
+    const { status } = request.query;
+
+    response.send('Замовлення користувача: ' + id + ' зі статусом: ' + status);
 });
+
+app.get("/{*any}", function(request, response){
+    response.send('Сторінку не знайдено. Код 404.');
+});
+
+app.listen(3000);
