@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 const app = express();
 
 
@@ -19,12 +19,12 @@ app.get("/error", function(request, response){
 });
 
 app.get("/user/:id", function (request, response) {
-    response.send("user " + request.params.id);
+    response.send('user ' + request.params.id);
 });
 
 app.get("/search", (request, response) => {
     if (!request.query.q) {
-        return response.status(400).send("Не вказано пошуковий запит");
+        return response.status(400).send('Не вказано пошуковий запит');
     }
 
     response.send('Ви шукали:' + request.query.q);
