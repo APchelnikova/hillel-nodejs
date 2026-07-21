@@ -1,0 +1,10 @@
+html
+    head
+        title='Profile'
+    body
+        h1= name
+        p= role
+        p= isOnline === true ? 'Онлайн' : 'Офлайн'
+        ul
+            each hobby in hobbies
+                li= hobby

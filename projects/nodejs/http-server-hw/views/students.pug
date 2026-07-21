@@ -1,0 +1,8 @@
+html
+    head
+        title='Students'
+    body
+        ul
+            each student in students
+                p= student.name + ' '
+                    span(style="font-weight:300;color:#898989")= student.level
