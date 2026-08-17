@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Highlight Forbidden Words</title>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --panel: #171a23;
+            --border: #2a2e3a;
+            --text: #e6e8ee;
+            --muted: #8b8fa3;
+            --accent: #6c5ce7;
+            --accent-hover: #7d6ef0;
+            --danger: #ff6b6b;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            padding: 40px 16px;
+        }
+        .card {
+            width: 100%;
+            max-width: 640px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+        }
+        h1 { font-size: 20px; margin: 0 0 4px; }
+        p.sub { color: var(--muted); margin: 0 0 24px; font-size: 14px; }
+        label {
+            display: block;
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 6px;
+            margin-top: 18px;
+        }
+        textarea, input[type="text"] {
+            width: 100%;
+            background: #10121a;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            padding: 10px 12px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+        }
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        button {
+            margin-top: 20px;
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button:hover { background: var(--accent-hover); }
+        .result {
+            margin-top: 24px;
+            padding: 16px;
+            background: #10121a;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            min-height: 48px;
+            font-size: 15px;
+            line-height: 1.6;
+            word-break: break-word;
+        }
+        .result:empty::before {
+            content: "Результат з'явиться тут...";
+            color: var(--muted);
+        }
+        del { color: var(--danger); text-decoration-thickness: 2px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Highlight Forbidden Words</h1>
+
+    <label for="text-input">Текст</label>
+    <textarea id="text-input" rows="4">This is a test sentence with some bad words.</textarea>
+
+    <label for="words-input">Заборонені слова (через кому)</label>
+    <input type="text" id="words-input" value="bad, test">
+
+    <button id="run-btn">Перевірити текст</button>
+
+    <label>Результат</label>
+    <div class="result" id="result"></div>
+</div>
+
+<script src="highlightForbiddenWords.js"></script>
+<script>
+    const textInput = document.getElementById("text-input");
+    const wordsInput = document.getElementById("words-input");
+    const resultBox = document.getElementById("result");
+    const runBtn = document.getElementById("run-btn");
+
+    function renderSegments(segments) {
+        resultBox.replaceChildren();
+
+        for (const segment of segments) {
+            if (segment.isForbidden) {
+                const del = document.createElement("del");
+                del.textContent = segment.text;
+                resultBox.appendChild(del);
+            } else {
+                resultBox.appendChild(document.createTextNode(segment.text));
+            }
+        }
+    }
+
+    function updateResult() {
+        const text = textInput.value;
+        const forbiddenWords = wordsInput.value
+            .split(",")
+            .map((w) => w.trim())
+            .filter(Boolean);
+
+        renderSegments(highlightForbiddenWords(text, forbiddenWords));
+    }
+
+    runBtn.addEventListener("click", updateResult);
+
+    updateResult();
+</script>
+
+</body>
+</html>
